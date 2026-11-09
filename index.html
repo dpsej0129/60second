@@ -11,7 +11,32 @@
     <title>60 SECOND : HOME — 돌아갈 곳이 있다는 것</title>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <style>
+      body { margin: 0; background: #141a15; color: #d9dccb; }
+      .game-launcher { font-family: system-ui, sans-serif; max-width: 560px; margin: 18vh auto; padding: 28px; line-height: 1.9; }
+      .game-launcher a { display: inline-block; padding: 12px 20px; background: #dfc496; color: #252d20; text-decoration: none; }
+    </style>
+    <div id="app">
+      <div class="game-launcher">
+        <h1>60 SECOND : HOME</h1>
+        <p data-launch-status>게임을 불러오는 중입니다.</p>
+        <a data-play-link href="./downloads/60second.html">게임 바로 플레이</a>
+        <noscript><p>게임을 실행하려면 브라우저에서 JavaScript를 허용해 주세요.</p></noscript>
+      </div>
+    </div>
+    <script type="module">
+      // Vite injects import.meta.env in development and production builds.
+      // A branch-based Pages deployment serves this file without Vite, so use
+      // the checked-in standalone game instead of loading uncompiled sources.
+      if (import.meta.env) {
+        import('./src/main.js').catch((error) => {
+          console.error('Game failed to load:', error);
+          const status = document.querySelector('[data-launch-status]');
+          if (status) status.textContent = '게임을 불러오지 못했습니다. 아래 버튼으로 독립 실행 버전을 열어 주세요.';
+        });
+      } else {
+        window.location.replace(new URL('./downloads/60second.html', window.location.href));
+      }
+    </script>
   </body>
 </html>

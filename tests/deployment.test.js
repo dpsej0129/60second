@@ -7,12 +7,16 @@ import { resolve, extname, sep } from 'node:path';
 // Serve the real build below a project prefix, as GitHub Pages does.
 const root = resolve('dist');
 const prefix = '/60second/';
+const branchPrefix = '/branch/60second/';
 const server = createServer(async (req, res) => {
   try {
     const path = new URL(req.url, 'http://localhost').pathname;
-    if (!path.startsWith(prefix)) { res.writeHead(404).end(); return; }
-    const file = resolve(root, decodeURIComponent(path.slice(prefix.length)) || 'index.html');
-    if (!file.startsWith(root + sep)) { res.writeHead(404).end(); return; }
+    const isBranch = path.startsWith(branchPrefix);
+    const selectedPrefix = isBranch ? branchPrefix : prefix;
+    const selectedRoot = isBranch ? resolve('.') : root;
+    if (!path.startsWith(selectedPrefix)) { res.writeHead(404).end(); return; }
+    const file = resolve(selectedRoot, decodeURIComponent(path.slice(selectedPrefix.length)) || 'index.html');
+    if (!file.startsWith(selectedRoot + sep)) { res.writeHead(404).end(); return; }
     const body = await readFile(file);
     res.setHeader('Content-Type', { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html' }[extname(file)] || 'application/octet-stream');
     res.end(body);
@@ -28,7 +32,8 @@ try {
   page.on('response', r => { if (r.status() >= 400) failed.push(r.url()); });
   await page.clock.install({ time: new Date('2026-11-09T03:00:00Z') });
   await page.clock.pauseAt(new Date('2026-11-09T03:00:01Z'));
-  await page.goto(`http://127.0.0.1:${server.address().port}${prefix}`);
+  for (const path of [prefix, branchPrefix]) {
+  await page.goto(`http://127.0.0.1:${server.address().port}${path}`);
   await expect(page.locator('h1')).toHaveText('아직, 돌아갈 집이 있다.');
   assert.notEqual(await page.locator('.topbar').evaluate(el => getComputedStyle(el).position), 'static', 'production CSS loaded');
   await page.locator('[data-action="start"]').click();
@@ -40,5 +45,6 @@ try {
   await expect(page.locator('.family-modal')).toBeVisible();
   assert.deepEqual(errors, []);
   assert.deepEqual(failed, []);
-  console.log('PASS deployment: production JS/CSS, start, collect, and return under /60second/; no failed assets or browser errors');
+  console.log(`PASS deployment: ${path} loads game, CSS, collection, and return with no failed assets or browser errors`);
+  }
 } finally { await browser?.close(); await new Promise(r => server.close(r)); }

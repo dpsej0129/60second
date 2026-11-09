@@ -10,7 +10,9 @@
 2. **Actions → Deploy game to GitHub Pages → Run workflow**로 첫 배포를 실행합니다. 이후에는 `main` 푸시로 자동 갱신됩니다.
 3. 워크플로의 `deploy` 작업이 성공하면 **https://dpsej0129.github.io/60second/** 를 엽니다. 실제 배포 완료 여부는 Actions 결과 또는 Settings → Pages에서 확인합니다.
 
-`.github/workflows/deploy-pages.yml`이 배포를 담당합니다. Vite의 상대 에셋 경로로 프로젝트 하위 주소에서도 CSS와 JavaScript를 불러옵니다. `npm run test:deploy`는 실제 빌드를 `/60second/` 아래에 올려 스타일 로드와 시작·수집·귀가를 검사합니다. 도메인 루트에 정적 호스팅할 때도 같은 `dist/` 폴더를 사용할 수 있습니다. 로컬 세이브의 최장 기록은 접속 도메인별로 보관됩니다.
+`index.html`은 빌드 도구 없이 원본이 배포되는 경우에도 `downloads/60second.html`로 자동 연결합니다. 따라서 Pages가 브랜치의 루트 폴더를 배포하는 설정에서도 플레이할 수 있습니다. 독립 실행 게임의 고정 웹 주소는 **https://dpsej0129.github.io/60second/downloads/60second.html** 입니다.
+
+`.github/workflows/deploy-pages.yml`이 배포를 담당합니다. Vite의 상대 에셋 경로로 프로젝트 하위 주소에서도 CSS와 JavaScript를 불러옵니다. `npm run test:deploy`는 실제 빌드를 `/60second/` 아래에 올려 빌드 배포와 원본 브랜치 배포 모두에서 스타일 로드와 시작·수집·귀가를 검사합니다. 도메인 루트에 정적 호스팅할 때도 같은 `dist/` 폴더를 사용할 수 있습니다. 로컬 세이브의 최장 기록은 접속 도메인별로 보관됩니다.
 
 ## 바로 플레이하기 (설치 불필요)
 
