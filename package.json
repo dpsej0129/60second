@@ -1,0 +1,22 @@
+{
+  "name": "sixty-seconds-home",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/engine.test.js",
+    "test:browser": "node tests/browser.test.js",
+    "build:offline": "npm run build && node scripts/build-offline.mjs",
+    "test:offline": "npm run build:offline && node tests/offline.test.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "vite": "^7.2.2"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
