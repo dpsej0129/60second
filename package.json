@@ -10,7 +10,8 @@
     "test": "node --test tests/engine.test.js",
     "test:browser": "node tests/browser.test.js",
     "build:offline": "npm run build && node scripts/build-offline.mjs",
-    "test:offline": "npm run build:offline && node tests/offline.test.js"
+    "test:offline": "npm run build:offline && node tests/offline.test.js",
+    "test:deploy": "npm run build && node tests/deployment.test.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

@@ -2,6 +2,16 @@
 
 마트에서 집까지 단 60초. 물자를 챙기고, 가족을 선택하고, 하루씩 버티며 탈출할 길을 찾는 한국어 좀비 생존 게임입니다. 기존 저장소에 기술 스택이 없어 **Vite + 순수 JavaScript / CSS / SVG**로 구현했습니다. 서버·데이터베이스·API 키·외부 이미지나 폰트 없이 실행됩니다.
 
+## 웹으로 배포하기 (GitHub Pages)
+
+한 번 설정하면 `main`에 푸시할 때마다 규칙 테스트 → 프로덕션 빌드 → GitHub Pages 배포가 자동으로 실행됩니다. 배포된 페이지에서는 설치나 파일 다운로드 없이 시작 버튼으로 바로 플레이할 수 있습니다.
+
+1. 저장소의 **Settings → Pages → Build and deployment → Source**를 **GitHub Actions**로 선택합니다.
+2. **Actions → Deploy game to GitHub Pages → Run workflow**로 첫 배포를 실행합니다. 이후에는 `main` 푸시로 자동 갱신됩니다.
+3. 워크플로의 `deploy` 작업이 성공하면 **https://dpsej0129.github.io/60second/** 를 엽니다. 실제 배포 완료 여부는 Actions 결과 또는 Settings → Pages에서 확인합니다.
+
+`.github/workflows/deploy-pages.yml`이 배포를 담당합니다. Vite의 상대 에셋 경로로 프로젝트 하위 주소에서도 CSS와 JavaScript를 불러옵니다. `npm run test:deploy`는 실제 빌드를 `/60second/` 아래에 올려 스타일 로드와 시작·수집·귀가를 검사합니다. 도메인 루트에 정적 호스팅할 때도 같은 `dist/` 폴더를 사용할 수 있습니다. 로컬 세이브의 최장 기록은 접속 도메인별로 보관됩니다.
+
 ## 바로 플레이하기 (설치 불필요)
 
 이 저장소의 **Code → Download ZIP**으로 내려받아 압축을 푼 다음, `downloads/60second.html`을 Chrome·Edge·Firefox로 여세요. 서버 주소에 접속하거나 Node.js를 설치할 필요가 없습니다. GitHub의 HTML 코드 화면 자체에서는 게임이 실행되지 않습니다.
